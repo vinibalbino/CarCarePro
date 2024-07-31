@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BrandController;
 use Illuminate\Foundation\Application;
+
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,10 +22,11 @@ Route::get('/', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/marcas', function () {
-    return Inertia::render('Brands');
-})->middleware(['auth', 'verified'])->name('marcas');
-
+Route::get('/marcas', [BrandController::class, 'home'])->middleware(['auth', 'verified'])->name('marcas');
+Route::get('/marcas/formulario', [BrandController::class, 'form'] )->middleware(['auth', 'verified'])->name('marcas.formulario');
+Route::post('/marcas/adicionar', [BrandController::class, 'create'] )->middleware(['auth', 'verified'])->name('marcas.adicionar');
+Route::put('/marcas/editar/${id}', [BrandController::class, 'editar'] )->middleware(['auth', 'verified'])->name('marcas.editar');
+Route::delete('/marcas/delete', [BrandController::class, 'destroy'] )->middleware(['auth', 'verified'])->name('marcas.delete');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,19 +1,22 @@
 <script setup>
 import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
-import { HomeIcon, CarIcon, UsersRound, User, WrenchIcon, LogOut } from 'lucide-vue-next';
+import { HomeIcon, CarIcon, UsersRound, User, WrenchIcon, LogOut, ContainerIcon} from 'lucide-vue-next';
+import ToastList from '@/Components/ToastList.vue'
+
 
 const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100" >
+        <ToastList />
+
+        <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100" style="background-color: #003366;">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,21 +24,26 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink class="text-white" :href="route('dashboard')" :active="route().current('dashboard')">
-                                    <HomeIcon  strokeWidth={1} class="mr-2" />
+                                <NavLink class="text-white" :href="route('dashboard')"
+                                    :active="route().current('dashboard')">
+                                    <HomeIcon strokeWidth={1} class="mr-2" />
                                     Home
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('marcas')">
+                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('veiculos')">
                                     <CarIcon strokeWidth={1} class="mr-2" />
                                     Veículos
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('marcas')">
+                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('clientes')">
                                     <UsersRound strokeWidth={1} class="mr-2" />
                                     Clientes
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('marcas')">
+                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('revisoes')">
                                     <WrenchIcon strokeWidth={1} class="mr-2" />
                                     Revisões
+                                </NavLink>
+                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('marcas')">
+                                    <ContainerIcon strokeWidth={1} class="mr-2" />
+                                    Marcas
                                 </NavLink>
                             </div>
                         </div>
@@ -64,7 +72,7 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink :href="route('profile.edit')">
                                             <User />
                                             Perfil
-                                         </DropdownLink>
+                                        </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             <LogOut />
                                             Sair
