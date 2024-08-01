@@ -29,19 +29,19 @@ const showingNavigationDropdown = ref(false);
                                     <HomeIcon strokeWidth={1} class="mr-2" />
                                     Home
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('veiculos')">
+                                <NavLink class="text-white" :href="route('marcas')" :active="$page.url.startsWith('/veiculos')">
                                     <CarIcon strokeWidth={1} class="mr-2" />
                                     Veículos
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('clientes')">
+                                <NavLink class="text-white" :href="route('clientes')" :active="$page.url.startsWith('/clientes')">
                                     <UsersRound strokeWidth={1} class="mr-2" />
                                     Clientes
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('revisoes')">
+                                <NavLink class="text-white" :href="route('marcas')" :active="$page.url.startsWith('/revisoes')">
                                     <WrenchIcon strokeWidth={1} class="mr-2" />
                                     Revisões
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('marcas')" :active="route().current('marcas')">
+                                <NavLink class="text-white" :href="route('marcas')" :active="$page.url.startsWith('/marcas')">
                                     <ContainerIcon strokeWidth={1} class="mr-2" />
                                     Marcas
                                 </NavLink>

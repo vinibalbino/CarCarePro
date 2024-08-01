@@ -58,7 +58,7 @@ class BrandController extends Controller
         return redirect()->route('marcas');
     }
 
-    public function editar(Request $request){
+    public function edit(Request $request){
 
         $request->validate([
             'name' => 'max:255 | required',
