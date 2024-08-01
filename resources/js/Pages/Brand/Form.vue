@@ -25,13 +25,6 @@ const submit = () => {
                 });
                 form.reset();
             },
-            onError: () => {
-                toast.add({
-                    message: `Marca ${form.name} não foi adicionada com sucesso!`,
-                    type: "erro",
-                });
-                form.reset();
-            }
         })
     }else {
         form.put(route('marcas.editar', {
@@ -43,14 +36,8 @@ const submit = () => {
                     type: "sucess",
                 });
                 form.reset();
-            },
-            onError: () => {
-                toast.add({
-                    message: `Marca ${form.name} não foi editada com sucesso!`,
-                    type: "erro",
-                });
-                form.reset();
             }
+
         })
     }
 }
@@ -81,7 +68,7 @@ const submit = () => {
                                     v-model="form.name"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                     id="grid-first-name" type="text" placeholder="Chevrolet" />
-                                <!-- <p class="text-red-500 text-xs italic">Please fill out this field.</p> -->
+                                <p v-if="form.errors.name" class="text-red-500 text-xs italic">Já existe a marca com este nome</p>
                             </div>
                         </div>
                         <div class="flex gap-10 w-full md:w-7/12 mb-6 md:mb-0">

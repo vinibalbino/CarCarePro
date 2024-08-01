@@ -22,27 +22,64 @@ const form = useForm({
     neighborhood: props.owner ? props.owner.address.neighborhood : '' ,
 });
 
+function validateCPF(cpf) {
+    // Remove caracteres não numéricos
+    cpf = cpf.replace(/[^\d]/g, '');
+
+    // Verifica se o CPF tem 11 dígitos e não é uma sequência repetida
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false;
+    }
+
+    // Função para calcular o dígito verificador
+    const calcularDigito = (cpf, peso) => {
+        let soma = 0;
+        for (let i = 0; i < cpf.length; i++) {
+            soma += cpf[i] * peso--;
+        }
+        const resto = soma % 11;
+        return resto < 2 ? 0 : 11 - resto;
+    };
+
+    // Verifica o primeiro dígito verificador
+    const primeiroDigito = calcularDigito(cpf.substring(0, 9), 10);
+    if (parseInt(cpf.charAt(9), 10) !== primeiroDigito) {
+        return false;
+    }
+
+    // Verifica o segundo dígito verificador
+    const segundoDigito = calcularDigito(cpf.substring(0, 10), 11);
+    return parseInt(cpf.charAt(10), 10) === segundoDigito;
+}
+
 
 const title = props.owner ? 'Editar Cliente' : 'Adicionar Cliente';
 
 const submit = () => {
     if (!props.owner) {
-        form.post(route('clientes.adicionar'), {
-            onSuccess: () => {
-                toast.add({
-                    message: `Cliente ${form.full_name} adicionado com sucesso!`,
-                    type: "sucess",
-                });
-                form.reset();
-            },
-            onError: () => {
-                toast.add({
-                    message: `Não foi possivel adicionar o cliente ${form.full_name} adicionado com sucesso!`,
-                    type: "erro",
-                });
-                form.reset();
-            }
-        })
+        if(validateCPF(form.cpf)){
+            form.post(route('clientes.adicionar'), {
+                onSuccess: () => {
+                    toast.add({
+                        message: `Cliente adicionado com sucesso!`,
+                        type: "sucess",
+                    });
+                    form.reset();
+                },
+                onError: () => {
+                    toast.add({
+                        message: `Não foi possivel adicionar o cliente adicionado com sucesso!`,
+                        type: "erro",
+                    });
+                    form.reset();
+                }
+            })
+        }else {
+            toast.add({
+                        message: `CPF do cliente não é valido!`,
+                        type: "erro",
+                    });
+        }
     } else {
         form.put(route('clientes.editar', {
             'id': props.owner.id
@@ -67,6 +104,7 @@ const submit = () => {
 
 async function buscarEndereco(){
     if (form.zipcode != undefined && form.zipcode.length == 8 ) {
+        form.zipcode.replace(/[.\-]/g, '');
         const response = await axios.get(`https://viacep.com.br/ws/${form.zipcode}/json/`);
         console.log(response.data);
         form.street = response.data.logradouro;
@@ -80,6 +118,20 @@ async function buscarEndereco(){
     }
 
 }
+
+function formatCpf() {
+
+      let cpfValue = (form.cpf).replace(/\D/g, '');
+
+
+      if (cpfValue.length <= 11) {
+        cpfValue = cpfValue.replace(/(\d{3})(\d)/, '$1.$2');
+        cpfValue = cpfValue.replace(/(\d{3})(\d)/, '$1.$2');
+        cpfValue = cpfValue.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      }
+
+      form.cpf = cpfValue;
+    }
 
 
 </script>
@@ -107,15 +159,15 @@ async function buscarEndereco(){
                                 <input v-model="form.full_name"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 my-5 leading-tight focus:outline-none focus:bg-white"
                                     id="grid-first-name" type="text" placeholder="Vinicius Silva Balbino" />
-
+                                    <p v-if="form.errors.full_name" class="text-red-500 text-xs italic">Nome do Cliente é necessario</p>
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-4"
                                     for="grid-first-name">
                                     CPF
                                 </label>
-                                <input v-model="form.cpf"
+                                <input v-model="form.cpf" maxlength="14" @input="formatCpf"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 my-5 leading-tight focus:outline-none focus:bg-white"
-                                    id="grid-first-name" type="text" placeholder="04714926128" />
-
+                                    id="grid-first-name" type="text" placeholder="000.000.000-00" />
+                                    <p v-if="form.errors.cpf" class="text-red-500 text-xs italic">CPF do Cliente é necessario</p>
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-4"
                                     for="grid-first-name">
                                     Sexo
@@ -126,8 +178,7 @@ async function buscarEndereco(){
                                     <option value="M">Masculino</option>
                                     <option value="F">Feminino</option>
                                 </select>
-
-
+                                <p v-if="form.errors.sex" class="text-red-500 text-xs italic">Sexo do Cliente é necessario</p>
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-4"
                                     for="grid-first-name">
                                     cep
@@ -135,7 +186,7 @@ async function buscarEndereco(){
                                 <input v-model="form.zipcode"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 my-5 leading-tight focus:outline-none focus:bg-white"
                                     id="grid-first-name" type="text" placeholder="79801016" />
-
+                                    <p v-if="form.errors.zipcode" class="text-red-500 text-xs italic">CEP do Cliente é necessario</p>
                                 <button @click="buscarEndereco"
                                  type="button"
                                  class="w-full mb-6 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
@@ -162,6 +213,7 @@ async function buscarEndereco(){
                                 <input v-model="form.house_number"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 my-5 leading-tight focus:outline-none focus:bg-white"
                                     id="grid-first-name" type="text" placeholder="2020" />
+                                <p v-if="form.errors.house_number" class="text-red-500 text-xs italic">Numero da residencia do Cliente é necessario</p>
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-4"
                                     for="grid-first-name">
                                     cidade

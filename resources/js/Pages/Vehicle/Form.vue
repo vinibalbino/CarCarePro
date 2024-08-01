@@ -4,37 +4,38 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import toast from "@/Stores/toast.js";
-import axios from 'axios';
 
 const props = defineProps([
-    'owner'
+    'owner',
+    'vehicle',
 ])
 
-
+console.log(props.owner);
 const form = useForm({
-
+    model: props.vehicle?.model
 });
 
 
-const title = props.owner ? 'Editar Cliente' : 'Adicionar Cliente';
+const title = props.vehicle ? 'Editar Veiculo' : 'Adicionar Veiculo';
 
 const submit = () => {
-    if (!props.owner) {
-        form.post(route('clientes.adicionar'), {
+    if (!props.vehicle) {
+        form.post(route('veiculos.adicionar'), {
             onSuccess: () => {
                 toast.add({
-                    message: `Cliente ${form.full_name} adicionado com sucesso!`,
+                    message: `Veiculo adicionado com sucesso!`,
                     type: "sucess",
                 });
                 form.reset();
             },
             onError: () => {
                 toast.add({
-                    message: `Não foi possivel adicionar o cliente ${form.full_name} adicionado com sucesso!`,
+                    message: `Não foi possivel adicionar o veículo`,
                     type: "erro",
                 });
                 form.reset();
-            }
+            },
+
         })
     } else {
         form.put(route('clientes.editar', {
@@ -58,21 +59,6 @@ const submit = () => {
     }
 }
 
-async function buscarEndereco(){
-    if (form.zipcode != undefined && form.zipcode.length == 8 ) {
-        const response = await axios.get(`https://viacep.com.br/ws/${form.zipcode}/json/`);
-        console.log(response.data);
-        form.street = response.data.logradouro;
-        form.neighborhood = response.data.bairro;
-        form.city = response.data.localidade;
-    }else{
-        toast.add({
-            message: `Insira o CEP corretamente!`,
-            type: "erro",
-        });
-    }
-
-}
 
 
 </script>
@@ -95,12 +81,12 @@ async function buscarEndereco(){
                             <div class="w-full md:w-7/12 px-3 mb-6 md:mb-0">
                                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-4"
                                     for="grid-first-name">
-                                    Nome Completo
+                                    Modelo
                                 </label>
-                                <input v-model="form.full_name"
+                                <input v-model="form.model"
                                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 my-5 leading-tight focus:outline-none focus:bg-white"
-                                    id="grid-first-name" type="text" placeholder="Vinicius Silva Balbino" />
-
+                                    id="grid-first-name" type="text" placeholder="Cruze" />
+                                    <p v-if="form.model" class="text-red-500 text-xs italic">Nome do modelo é necessário</p>
                             </div>
                         </div>
                         <div class="flex gap-10 w-full md:w-7/12 mb-6 md:mb-0">
@@ -110,7 +96,7 @@ async function buscarEndereco(){
                             </DangerButton>
                             </Link>
                             <PrimaryButton type="submit" class="hover:bg-blue-400">
-                                {{ props.owner ? 'Editar Cliente' : 'Salvar Cliente' }}
+                                {{ props.owner ? 'Editar Veículo' : 'Salvar Cliente' }}
                             </PrimaryButton>
                         </div>
                     </form>

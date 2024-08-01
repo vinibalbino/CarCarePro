@@ -10,9 +10,10 @@ const emit = defineEmits(['cancel', 'remove']);
 
 <template>
     <div class="px-6 pt-6 pb-2 sm:p-6 sm:pb-4">
-        <div class="flex sm:flex sm:items-start">
-            <div class="mx-auto my-auto flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full bg-yellow-200 sm:mx-0 sm:h-10 sm:w-10">
+        <div class="flex gap-2 sm:flex sm:items-start">
+            <div class="mx-auto my-auto flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full bg-white 00 sm:mx-0 sm:h-10 sm:w-10">
                 <TriangleAlert
+                    class="h-16 w-16"
                     color="red"
                 />
             </div>

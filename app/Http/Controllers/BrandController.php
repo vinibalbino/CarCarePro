@@ -31,21 +31,14 @@ class BrandController extends Controller
 
     public function create(Request $request){
         $request->validate([
-            'name' => 'max:255 | required',
+            'name' => 'required|max:255|unique:brands,name',
         ]);
 
         $user_id = auth()->id();
-
         $dados = $request->all();
-
-        $dados['user_id']= $user_id;
-
-        // $dados = array_merge($dados, [
-        //     'user_id' => $user_id,
-        // ])
+        $dados['user_id'] = $user_id;
 
         Brand::create($dados);
-
 
         return redirect()->route('marcas');
     }

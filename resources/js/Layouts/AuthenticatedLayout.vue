@@ -29,11 +29,7 @@ const showingNavigationDropdown = ref(false);
                                     <HomeIcon strokeWidth={1} class="mr-2" />
                                     Home
                                 </NavLink>
-                                <NavLink class="text-white" :href="route('veiculos')" :active="$page.url.startsWith('/veiculos')">
-                                    <CarIcon strokeWidth={1} class="mr-2" />
-                                    Veículos
-                                </NavLink>
-                                <NavLink class="text-white" :href="route('clientes')" :active="$page.url.startsWith('/clientes')">
+                                <NavLink class="text-white" :href="route('clientes')" :active="$page.url.startsWith('/clientes') || $page.url.startsWith('/veiculos')">
                                     <UsersRound strokeWidth={1} class="mr-2" />
                                     Clientes
                                 </NavLink>
@@ -111,11 +107,7 @@ const showingNavigationDropdown = ref(false);
                             <HomeIcon strokeWidth={1} class="mr-2" />
                             Home
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink class="" :href="route('marcas')" :active="$page.url.startsWith('/veiculos')">
-                            <CarIcon strokeWidth={1} class="mr-2" />
-                            Veículos
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink class="" :href="route('clientes')" :active="$page.url.startsWith('/clientes')">
+                        <ResponsiveNavLink class="" :href="route('clientes')" :active="$page.url.startsWith('/clientes') || $page.url.startsWith('/veiculos') ">
                             <UsersRound strokeWidth={1} class="mr-2" />
                             Clientes
                         </ResponsiveNavLink>
