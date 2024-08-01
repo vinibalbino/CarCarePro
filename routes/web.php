@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Foundation\Application;
 
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,14 @@ Route::get('/clientes/formulario', [OwnerController::class, 'form'])->middleware
 Route::post('/clientes/adicionar', [OwnerController::class, 'create'])->middleware(['auth', 'verified'])->name('clientes.adicionar');
 Route::put('/clientes/adicionar/${id}', [OwnerController::class, 'edit'])->middleware(['auth', 'verified'])->name('clientes.editar');
 Route::delete('/clientes/delete', [OwnerController::class, 'destroy'])->middleware(['auth', 'verified'])->name('clientes.delete');
+
+// Vehicles
+Route::get('/veiculos',  [VehicleController::class, 'home'])->middleware(['auth', 'verified'])->name('veiculos');
+// Route::get('/cliente/${id}',  [OwnerController::class, 'info'])->middleware(['auth', 'verified'])->name('clientes.cliente');
+Route::get('/veiculos/formulario', [VehicleController::class, 'form'])->middleware(['auth', 'verified'])->name('veiculos.formulario');
+// Route::post('/clientes/adicionar', [OwnerController::class, 'create'])->middleware(['auth', 'verified'])->name('clientes.adicionar');
+// Route::put('/clientes/adicionar/${id}', [OwnerController::class, 'edit'])->middleware(['auth', 'verified'])->name('clientes.editar');
+// Route::delete('/clientes/delete', [OwnerController::class, 'destroy'])->middleware(['auth', 'verified'])->name('clientes.delete');
 
 
 
